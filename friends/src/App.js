@@ -9,8 +9,11 @@ function App() {
     <Router>
       <div className="App">
         HeLlO wOrLd: SeCrEt ClUb
+        <p>bE tHeRe oR bE sQuArE</p>
       </div>
-      <Link to="/login">Login</Link>
+      <h1>
+        <Link to="/login">Login</Link>
+      </h1>
       <Switch>
         <Route path="/login" component={Login}/>
       </Switch>
