@@ -6,6 +6,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth'
 const FriendsList = () => {
     const [friends, setFriends] = useState({id: Date.now()});
     const [friendsList, setFriendsList] = useState([])
+    const [editedFriend, setEditedFriend] = useState({})
 
     const handleChanges = e => {
         setFriends({
@@ -13,7 +14,14 @@ const FriendsList = () => {
             [e.target.name]: e.target.value
             }
         )
+    };
+    const handleEdits = e => {
+        setEditedFriend({
+            ...editedFriend,
+            [e.target.name]: e.target.value
+        })
     }
+    
     useEffect(() => {
         axiosWithAuth()
         .get('http://localhost:5000/api/friends')
@@ -27,7 +35,6 @@ const FriendsList = () => {
     }, [])
     
     const removeFriend = e => {
-        
         axiosWithAuth()
         .delete(`http://localhost:5000/api/friends/${e.target.value}`)
         .then(res => {
@@ -37,7 +44,6 @@ const FriendsList = () => {
         .catch(err => {
             console.log('could not remove friend', err)
         })
-    
     }
 
     const submit = e => {
@@ -53,8 +59,24 @@ const FriendsList = () => {
             console.log('could not add friend', err)
         })
     };
-
     
+    const editFriend = e => {
+        e.preventDefault()
+        axiosWithAuth()
+        .put(`http://localhost:5000/api/friends/${e.target.value}`, {
+            id: Date.now(),
+            name: editedFriend.name, 
+            age: editedFriend.age,
+            email: editedFriend.email
+        })
+        .then(res => {
+            console.log(res)
+            setFriendsList(res.data)
+        })
+        .catch(err => {
+            console.log('edit not working', err)
+        })
+    }; 
 
     return(
         <>
@@ -86,10 +108,34 @@ const FriendsList = () => {
             {friendsList.map(item => {
                 return(
                     <div className='friend-card' key={item.id}>
-                        <h3>{item.name}</h3>
-                        <p>{item.age}</p>
-                        <p>{item.email}</p>
+                        <form>
+                            <h3>{item.name}</h3>
+                                <input
+                                    placeholder='edit name'
+                                    type="text"
+                                    name='name'
+                                    value={editedFriend.name}
+                                    onChange={handleEdits}
+                                />
+                            <p>{item.age}</p>
+                                <input
+                                    placeholder='edit age'
+                                    type="text"
+                                    name='age'
+                                    value={editedFriend.age}
+                                    onChange={handleEdits}
+                                />
+                            <p>{item.email}</p>
+                                <input
+                                    placeholder='edit email'
+                                    type="text"
+                                    name='email'
+                                    value={editedFriend.email}
+                                    onChange={handleEdits}
+                                />
+                        </form>
                         <button onClick={removeFriend} value={item.id} >Remove Friend</button>
+                        <button onClick={editFriend} value={item.id}>Apply Changes</button>
                     </div>
                 )
             })}
