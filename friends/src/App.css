@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+}
+.friends-list-container{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cards-container{
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 80%;
+  max-width: 1100px;
+}
+
+.friend-card{
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.link-container{
+  display:flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.login-form{
+  margin: 0 auto;
+  width: 500px;
+  margin-top: 25px;
+}
