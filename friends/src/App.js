@@ -13,9 +13,9 @@ function App() {
         HeLlO wOrLd: SeCrEt ClUb
         <p>bE tHeRe oR bE sQuArE</p>
       </div>
-      <h1>
-        <Link to="/login">Login</Link>
-        <Link to="/friends">Private Friends List Page</Link>
+      <h1 className='link-container'>
+        <Link className='link-buttons' to="/login">Login</Link>
+        <Link className='link-buttons' to="/friends">Private Friends List Page</Link>
       </h1>
       <Switch>
         <Route path="/login" component={Login}/>

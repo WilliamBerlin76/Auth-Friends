@@ -29,11 +29,12 @@ class Login extends React.Component {
                 this.props.history.push('/friends')
             })
             .catch(err => console.log(err.response))
-    }
+    };
     render(){
         return(
             <>
-                <form onSubmit={this.submit}>
+                <form className='login-form' onSubmit={this.submit}>
+                <h2>Log In</h2>
                     <input
                         placeholder="Username"
                         type='text'

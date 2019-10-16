@@ -26,7 +26,6 @@ const FriendsList = () => {
         axiosWithAuth()
         .get('http://localhost:5000/api/friends')
         .then(res => {
-            console.log(res);
             setFriendsList(res.data)
         })
         .catch(err => {
@@ -38,7 +37,7 @@ const FriendsList = () => {
         axiosWithAuth()
         .delete(`http://localhost:5000/api/friends/${e.target.value}`)
         .then(res => {
-            console.log(res);
+            localStorage.setItem('friends', JSON.stringify( res.data))
             setFriendsList(res.data);
         })
         .catch(err => {
@@ -51,8 +50,7 @@ const FriendsList = () => {
         axiosWithAuth()
         .post('http://localhost:5000/api/friends', friends)
         .then(res => {
-            console.log(res)
-            localStorage.setItem('friend', res.data)
+            localStorage.setItem('friends', JSON.stringify( res.data))
             setFriendsList(res.data)
         })
         .catch(err => {
@@ -70,7 +68,7 @@ const FriendsList = () => {
             email: editedFriend.email
         })
         .then(res => {
-            console.log(res)
+            localStorage.setItem('friends', JSON.stringify( res.data))
             setFriendsList(res.data)
         })
         .catch(err => {
@@ -79,7 +77,7 @@ const FriendsList = () => {
     }; 
 
     return(
-        <>
+        <section className='friends-list-container'>
             <h1>Friends List</h1>
             <form>
                 <input
@@ -105,42 +103,43 @@ const FriendsList = () => {
                 />
                 <button onClick={submit}>Add Friend </button>
             </form>
-            {friendsList.map(item => {
-                return(
-                    <div className='friend-card' key={item.id}>
-                        <form>
-                            <h3>{item.name}</h3>
-                                <input
-                                    placeholder='edit name'
-                                    type="text"
-                                    name='name'
-                                    value={editedFriend.name}
-                                    onChange={handleEdits}
-                                />
-                            <p>{item.age}</p>
-                                <input
-                                    placeholder='edit age'
-                                    type="text"
-                                    name='age'
-                                    value={editedFriend.age}
-                                    onChange={handleEdits}
-                                />
-                            <p>{item.email}</p>
-                                <input
-                                    placeholder='edit email'
-                                    type="text"
-                                    name='email'
-                                    value={editedFriend.email}
-                                    onChange={handleEdits}
-                                />
-                        </form>
-                        <button onClick={removeFriend} value={item.id} >Remove Friend</button>
-                        <button onClick={editFriend} value={item.id}>Apply Changes</button>
-                    </div>
-                )
-            })}
-
-        </>
+            <div className='cards-container'>
+                {friendsList.map(item => {
+                    return(
+                        <div className='friend-card' key={item.id}>
+                            <form key={item.id}>
+                                <h3>{item.name}</h3>
+                                    <input
+                                        placeholder='edit name'
+                                        type="text"
+                                        name='name'
+                                        value={editedFriend.name}
+                                        onChange={handleEdits}
+                                    />
+                                <p>age: {item.age}</p>
+                                    <input
+                                        placeholder='edit age'
+                                        type="text"
+                                        name='age'
+                                        value={editedFriend.age}
+                                        onChange={handleEdits}
+                                    />
+                                <p>email: {item.email}</p>
+                                    <input
+                                        placeholder='edit email'
+                                        type="text"
+                                        name='email'
+                                        value={editedFriend.email}
+                                        onChange={handleEdits}
+                                    />
+                            </form>
+                            <button onClick={editFriend} value={item.id}>Apply Changes</button>
+                            <button onClick={removeFriend} value={item.id} >Remove Friend</button>
+                        </div>
+                    )
+                })}
+            </div>
+        </section>
     )
 };
 
