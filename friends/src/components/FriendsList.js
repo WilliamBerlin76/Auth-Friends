@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
+
 
 import { axiosWithAuth } from '../utils/axiosWithAuth'
  
@@ -13,7 +13,6 @@ const FriendsList = () => {
             [e.target.name]: e.target.value
             }
         )
-        console.log(friends)
     }
     useEffect(() => {
         axiosWithAuth()
@@ -26,7 +25,20 @@ const FriendsList = () => {
             console.log('data not coming', err)
         })
     }, [])
-      
+    
+    const removeFriend = e => {
+        
+        axiosWithAuth()
+        .delete(`http://localhost:5000/api/friends/${e.target.value}`)
+        .then(res => {
+            console.log(res);
+            setFriendsList(res.data);
+        })
+        .catch(err => {
+            console.log('could not remove friend', err)
+        })
+    
+    }
 
     const submit = e => {
         e.preventDefault()
@@ -34,12 +46,15 @@ const FriendsList = () => {
         .post('http://localhost:5000/api/friends', friends)
         .then(res => {
             console.log(res)
+            localStorage.setItem('friend', res.data)
             setFriendsList(res.data)
         })
         .catch(err => {
             console.log('could not add friend', err)
         })
-    }
+    };
+
+    
 
     return(
         <>
@@ -70,11 +85,12 @@ const FriendsList = () => {
             </form>
             {friendsList.map(item => {
                 return(
-                    <>
-                    <h3>{item.name}</h3>
-                    <p>{item.age}</p>
-                    <p>{item.email}</p>
-                    </>
+                    <div className='friend-card' key={item.id}>
+                        <h3>{item.name}</h3>
+                        <p>{item.age}</p>
+                        <p>{item.email}</p>
+                        <button onClick={removeFriend} value={item.id} >Remove Friend</button>
+                    </div>
                 )
             })}
 
